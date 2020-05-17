@@ -11,4 +11,4 @@
 - [2万字 | 前端基础拾遗90问](https://juejin.im/post/5e8b261ae51d4546c0382ab4)
 - [面试分享：两年工作经验成功面试阿里P6总结](https://juejin.im/post/5d690c726fb9a06b155dd40d)
 - [web前端面试总结(自认为还算全面哈哈哈哈哈！！！！）](https://juejin.im/post/5dafb263f265da5b9b80244d)
-- [面试分享：两年工作经验成功面试阿里P6总结](https://juejin.im/post/5d690c726fb9a06b155dd40d)
+- [面试分享：两年工作经验成功面试阿里P6总结](https://juejin.im/post/5d690c726fb9a06b155dd40d?_blank)
