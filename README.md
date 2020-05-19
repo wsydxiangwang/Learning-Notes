@@ -2,6 +2,9 @@
 
 个人笔记的网站，方便查看
 
+### Vue
+
+- [了解vue的Diff算法](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/Diff%20%E7%AE%97%E6%B3%95.md)
 
 ### 面试题
 
