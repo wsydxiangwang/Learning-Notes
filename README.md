@@ -4,7 +4,7 @@
 
 ### JavaScript
 
-- [带你深入this](https://github.com/wsydxiangwang/Learning-Notes/blob/master/JavaScript/%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5this.md)
+- [this 全面解析](https://github.com/wsydxiangwang/Learning-Notes/blob/master/JavaScript/this%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90.md)
 
 ### Vue
 
