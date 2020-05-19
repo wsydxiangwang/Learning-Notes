@@ -2,6 +2,10 @@
 
 个人笔记的网站，方便查看
 
+### JavaScript
+
+- [带你深入this](https://github.com/wsydxiangwang/Learning-Notes/blob/master/JavaScript/%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5this.md)
+
 ### Vue
 
 - [了解vue的Diff算法](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/Diff%20%E7%AE%97%E6%B3%95.md)
