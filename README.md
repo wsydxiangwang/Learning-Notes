@@ -2,10 +2,6 @@
 
 个人笔记的网站，方便查看
 
-### JavaScript
-
-- [this 全面解析](https://github.com/wsydxiangwang/Learning-Notes/blob/master/JavaScript/this%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90.md)
-
 ### Vue
 
 - [Vue 生命周期详解](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.md)
@@ -15,6 +11,10 @@
 - [nextTick 作用及原理](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/nextTick.md)
 - [set 实时更新的方法](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/set%E6%9B%B4%E6%96%B0%E5%AF%B9%E8%B1%A1%E5%92%8C%E6%95%B0%E7%BB%84.md)
 - [props 组件通信](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/props%20%E5%93%8D%E5%BA%94%E5%8E%9F%E7%90%86.md)
+
+### JavaScript
+
+- [this 全面解析](https://github.com/wsydxiangwang/Learning-Notes/blob/master/JavaScript/this%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90.md)
 
 ### 面试题
 
