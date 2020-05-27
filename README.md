@@ -8,7 +8,7 @@
 
 ### Vue
 
-- (Vue 生命周期详解)[https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.md]
+- [Vue 生命周期详解](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.md)
 - [什么是Virtual DOM](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/Virtual%20DOM.md)
 - [了解vue的Diff算法](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/Diff%20%E7%AE%97%E6%B3%95.md)
 - [响应式原理](https://github.com/wsydxiangwang/Learning-Notes/blob/master/Vue/%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86.md)
