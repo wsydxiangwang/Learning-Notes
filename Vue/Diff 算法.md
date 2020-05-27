@@ -9,11 +9,17 @@
 
 下面就拿一副图进行解释。
 
-![](./../img/diff1.jpg)
+![](./img/diff1.jpg)
 
 从上面的示例图可以看到，`Diff`算法中只会对同一层的元素进行比较，并且必须拥有相同节点元素，才会对其子节点进行比较，其他多余的同层节点都会一律做删除或添加操作。
 
 接下来，我们就从源码角度来看看这过程到底是如何发生的。🤔
+
+## diff流程图
+
+当数据发生改变时，set方法会让调用`Dep.notify`通知所有订阅者`Watcher`，订阅者就会调用`patch`给真实的DOM打补丁，更新相应的视图。
+
+![](./img/diff8.png)
 
 ## 从源码角度进行探究
 
@@ -100,7 +106,7 @@ function createPatchFunction (backend) {
 
 在上面的总结中，我们是可以看到两个方法，分别是`sameVnode`方法和`patchVnode`方法。接下来我们就来探讨一下这两个方法。
 
-### sameVnode
+## sameVnode
 
 判断两个节点间是否相同
 
@@ -137,7 +143,7 @@ function sameInputType (a, b) { // 比较两个节点的input类型是否相同
 - 数据属性是否为空`isDef`。
 - 是否为相同的`input`类型`sameInputType`。
 
-### patchVnode
+## patchVnode
 
 好啦，接着就到我们的主角`patchVnode`方法了，这个才是`Diff`相关方法，我们先来看看源码是如何实现的。🤔
 
@@ -189,12 +195,15 @@ function patchVnode (
 ```
 `patchVnode`方法做的事情不多，最主要就是按照一下场景做了处理;
 
-- 当`VNode`不为文本节点时。
-    - 当`VNode`节点和`oldVNode`节点都存在时，若两个节点不等，直接执行`updateChildren`递归执行其子节点进行比较。
-    - 当只有`VNode`节点存在时，若`oldVNode`节点是文本节点，先置空文本内容，再直接在真实`DOM`中相应位置新增`VNode`节点。
-    - 当只有`oldVNode`节点存在时，直接移除真实`DOM`中相应位置的多余`oldVNode`节点。
-    - 当只有`oldVNode`节点存在并且它是文本节点时，直接置空文本内容即可。
-- 当新`VNode`节点是文本节点时。若两个文本节点内容不一致，直接在真实DOM中对应旧`VNode`节点位置文本内容设置为新`VNode`节点文本内容即可。
+`diff`过程中又分了好几种情况，`oldCh` 为 `oldVnode`的子节点，`ch` 为 `Vnode`的子节点：
+
+- 首先进行文本节点的判断，若 `oldVnode.text !== vnode.text`，那么就会直接进行文本节点的替换；
+- `在vnode`没有文本节点的情况下，进入子节点的 `diff`；
+- 当 `oldCh` 和 `ch` 都存在且不相同的情况下，调用 `updateChildren` 对子节点进行 `diff`；
+- 若 `oldCh`不存在，`ch` 存在，首先清空 `oldVnode` 的文本节点，同时调用 `addVnodes` 方法将 ``ch`` 添加到`elm`真实 dom 节点当中；
+- 若 `oldCh`存在，`ch`不存在，则删除 `elm` 真实节点下的 `oldCh` 子节点；
+- 若 `oldVnode` 有文本节点，而 `vnode` 没有，那么就清空这个文本节点。
+
 
 
 接下来才是最重点呀。。😅 在上面中留下了`updateChildren`方法，那么这个方法又是干啥？
@@ -203,20 +212,20 @@ function patchVnode (
 
 `Diff算法`过程中，在将`oldVNode`树改动时，优先考虑相同位置的相同节点，再考虑需要移动的相同节点，最后才考虑创建或删除节点。
 
-### updateChildren
+## updateChildren
 
 有了上面的简单理解，我们就来继续探究啦 😄。
 
 ```js
 function updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
-  var oldStartIdx = 0; // 旧节点开始位置
-  var newStartIdx = 0; // 新节点开始位置
-  var oldEndIdx = oldCh.length - 1; // 旧节点结束位置
-  var oldStartVnode = oldCh[0]; // 旧节点第一个元素
-  var oldEndVnode = oldCh[oldEndIdx]; // 旧节点最后一个元素
-  var newEndIdx = newCh.length - 1; // 新节点结束位置
-  var newStartVnode = newCh[0]; // 新节点第一个元素
-  var newEndVnode = newCh[newEndIdx]; // 新节点最后一个元素
+  var oldStartIdx = 0;                  // 旧节点开始位置
+  var newStartIdx = 0;                  // 新节点开始位置
+  var oldEndIdx = oldCh.length - 1;     // 旧节点结束位置
+  var oldStartVnode = oldCh[0];         // 旧节点第一个元素
+  var oldEndVnode = oldCh[oldEndIdx];   // 旧节点最后一个元素
+  var newEndIdx = newCh.length - 1;     // 新节点结束位置
+  var newStartVnode = newCh[0];         // 新节点第一个元素
+  var newEndVnode = newCh[newEndIdx];   // 新节点最后一个元素
   var oldKeyToIdx, idxInOld, vnodeToMove, refElm;
   // ...
   while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) { // 同时从新旧子节点集合开始遍历
@@ -272,13 +281,53 @@ function updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly
 }
 ```
 
-### 具体的diff分析
+## 具体的diff分析
 
+我们可以假设有旧的Vnode数组和新的Vnode数组这两个数组,而且有四个变量充当指针分别指到两个数组的头尾.
 
+重复下面的对比过程，直到两个数组中任一数组的头指针超过尾指针，循环结束 :
 
+- 头头对比: 对比两个数组的头部，如果找到，把新节点patch到旧节点，头指针后移
+- 尾尾对比: 对比两个数组的尾部，如果找到，把新节点patch到旧节点，尾指针前移
+- 旧尾新头对比: 交叉对比，旧尾新头，如果找到，把新节点patch到旧节点，旧尾指针前移，新头指针后移
+- 旧头新尾对比: 交叉对比，旧头新尾，如果找到，把新节点patch到旧节点，新尾指针前移，旧头指针后移
+- 利用key对比: 用新指针对应节点的key去旧数组寻找对应的节点,这里分三种情况,当没有对应的key，那么创建新的节点,如果有key并且是相同的节点，把新节点patch到旧节点,如果有key但是不是相同的节点，则创建新节点
 
+我们假设有新旧两个数组:
+
+- 旧数组: `[1, 2, 3, 4, 5]`
+- 新数组: `[1, 4, 6, 1000, 100, 5]`
+
+![](./img/diff2.png)
+
+首先我们进行头头对比,新旧数组的头部都是`1`,因此将双方的头部指针后移.
+
+![](./img/diff3.png)
+
+我们继续头头对比,但是`2 !== 4`导致对比失败,我进入尾尾对比,`5 === 5`,那么尾部指针则可前移.
+
+![](./img/diff4.png)
+
+现在进入新的循环,头头对比`2 !== 4`,尾尾对比`4 !== 100`,此时进入交叉对比,先进行旧尾新头对比,即`4 === 4`,旧尾前移且新头后移.
+
+![](./img/diff5.png)
+
+接着再进入一个轮新的循环,头头对比`2 !== 6`,尾尾对比`3 !== 100`,交叉对比`2 != 100 3 != 6`,四种对比方式全部不符合,如果这个时候需要通过`key`去对比,然后将新头指针后移
+
+![](./img/diff6.png)
+
+继续重复上述对比的循环方式直至任一数组的头指针超过尾指针，循环结束.
+
+![](./img/diff7.png)
+
+在上述循环结束后,两个数组中可能存在未遍历完的情况: 循环结束后，
+
+- 先对比旧数组的头尾指针，如果旧数组遍历完了（可能新数组没遍历完，有漏添加的问题），添加新数组中漏掉的节点
+- 再对比新数组的头尾指针，如果新数组遍历完了（可能旧数组没遍历完，有漏删除的问题），删除旧数组中漏掉的节点
 
 
 ## 参考
+- [解析vue2.0的diff算法](https://github.com/aooy/blog/issues/2)
 - [详解vue的diff算法](https://juejin.im/post/5affd01551882542c83301da)
+- [面试官: 你对虚拟DOM原理的理解?](https://juejin.im/post/5d3f3bf36fb9a06af824b3e2#heading-5)
 - [【 Vue 源码分析 】如何在更新 Patch 中进行 Diff.md](https://github.com/Andraw-lin/about-Vue/blob/master/docs/%E3%80%90%20Vue%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%20%E3%80%91%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9B%B4%E6%96%B0%20Patch%20%E4%B8%AD%E8%BF%9B%E8%A1%8C%20Diff.md)
